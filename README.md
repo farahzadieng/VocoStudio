@@ -20,5 +20,5 @@ Upload an audio file, choose a suitable model, and download the processed result
 Install the dependencies:
 
 ```bash
-uv pip install -r requirements.txt
+uv sync
 ```
