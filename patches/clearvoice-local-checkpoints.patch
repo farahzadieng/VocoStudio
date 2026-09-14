@@ -1,0 +1,38 @@
+diff --git a/clearvoice/clearvoice/networks.py b/clearvoice/clearvoice/networks.py
+--- a/clearvoice/clearvoice/networks.py
++++ b/clearvoice/clearvoice/networks.py
+@@ -88,17 +88,10 @@ class SpeechModel:
+             print(f"Error finding free GPU: {e}")
+             return None
+ 
+     def download_model(self, model_name):
+-        checkpoint_dir = self.args.checkpoint_dir
+-        from huggingface_hub import snapshot_download
+-        if not os.path.exists(checkpoint_dir):
+-            os.makedirs(checkpoint_dir)
+-        print(f'downloading checkpoint for {model_name}')
+-        try:
+-            snapshot_download(repo_id=f'alibabasglab/{model_name}', local_dir=checkpoint_dir)
+-            return True
+-        except:
+-            return False
++        raise FileNotFoundError(
++            f"Local checkpoint for {model_name} is missing; automatic download is disabled."
++        )
+             
+     def load_model(self):
+         """
+@@ -122,10 +115,9 @@ class SpeechModel:
+         best_name = os.path.join(self.args.checkpoint_dir, 'last_best_checkpoint')
+         # Check if the last best checkpoint exists
+         if not os.path.isfile(best_name):
+-            if not self.download_model(self.name):
+-                # If downloading is unsuccessful
+-                print(f'Warning: Downloading model {self.name} is not successful. Please try again or manually download from https://huggingface.co/alibabasglab/{self.name}/tree/main !')
+-                return
++            raise FileNotFoundError(
++                f"Required local checkpoint manifest is missing: {best_name}"
++            )
+ 
+         if isinstance(self.model, nn.ModuleList):
+             with open(best_name, 'r') as f:

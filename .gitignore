@@ -1,3 +1,6 @@
 checkpoints/*
+.venv/
 .DS_Store/
 .DS_Store
+WEBAPP_GUIDE_FA.md
+requirem

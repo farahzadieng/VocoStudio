@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<nav class="breadcrumb"><a href="{{ url_for('index') }}">همه ابزارها</a><span>←</span><span>{{ tool.title_fa }}</span></nav>
+<section class="tool-layout">
+  <aside class="tool-intro {{ tool.accent }}">
+    <span class="eyebrow">{{ tool.short_fa }}</span>
+    <h1>{{ tool.title_fa }}</h1>
+    <p>{{ tool.description_fa }}</p>
+    <div class="mini-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="guide-note">
+      <strong>برای نتیجه بهتر</strong>
+      {% if tool.slug == 'target-speaker' %}
+      <p>صورت گوینده روبه‌دوربین، لب‌ها مشخص و تصویر بدون برش‌های سریع باشد.</p>
+      {% elif tool.slug == 'separation' %}
+      <p>فایل باید شامل صدای دو نفر باشد. هم‌پوشانی کوتاه گفتار قابل پردازش است.</p>
+      {% elif tool.slug == 'super-resolution' %}
+      <p>این ابزار برای گفتار کم‌کیفیت یا با نرخ نمونه‌برداری پایین طراحی شده است.</p>
+      {% else %}
+      <p>برای صدای معمولی مدل سریع و برای حفظ جزئیات بیشتر مدل تمام‌باند را انتخاب کنید.</p>
+      {% endif %}
+    </div>
+  </aside>
+
+  <form class="process-panel" method="post" enctype="multipart/form-data" action="{{ url_for('process', slug=tool.slug) }}" data-process-form>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="panel-step"><span>۱</span><div><strong>فایل ورودی</strong><small>فایل را بکشید و اینجا رها کنید یا از دستگاه انتخاب کنید.</small></div></div>
+    <label class="drop-zone" data-drop-zone>
+      <input type="file" name="media" required accept="{{ tool.accepted_extensions | join(',') }}" data-file-input>
+      <span class="upload-symbol">↑</span>
+      <strong data-file-title>فایل را اینجا رها کنید</strong>
+      <small data-file-meta>یا برای انتخاب فایل کلیک کنید</small>
+      <b>انتخاب فایل</b>
+    </label>
+
+    {% if tool.model_names | length > 1 %}
+    <div class="panel-step model-heading"><span>۲</span><div><strong>مدل پردازش</strong><small>براساس اولویت سرعت یا کیفیت انتخاب کنید.</small></div></div>
+    <div class="model-options">
+      {% for name in tool.model_names %}
+      {% set model = model_catalog[name] %}
+      <label class="model-option {% if name in unavailable_models %}disabled{% endif %}">
+        <input type="radio" name="model_name" value="{{ name }}" {% if loop.first %}checked{% endif %} {% if name in unavailable_models %}disabled{% endif %}>
+        <span class="radio-mark"></span>
+        <span><strong>{{ model.label_fa }}</strong><small>{{ model.guidance_fa }}</small><code>{{ name }}</code></span>
+        {% if loop.first %}<em>پیشنهاد سریع</em>{% endif %}
+      </label>
+      {% endfor %}
+    </div>
+    {% else %}
+    <input type="hidden" name="model_name" value="{{ tool.model_names[0] }}">
+    {% endif %}
+
+    <div class="process-state" data-process-state hidden>
+      <span class="state-spinner"></span>
+      <div><strong data-state-title>در حال بررسی فایل…</strong><small>این صفحه را تا پایان پردازش باز نگه دارید.</small></div>
+    </div>
+    <button class="primary-button" type="submit" data-submit-button>
+      <span>شروع پردازش</span><b>←</b>
+    </button>
+    <p class="privacy-line">⌁ فایل شما فقط روی همین دستگاه پردازش می‌شود.</p>
+  </form>
+</section>
+{% endblock %}
+

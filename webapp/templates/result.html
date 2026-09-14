@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<nav class="breadcrumb">
+  <a href="{{ url_for('index') }}">همه ابزارها</a><span>←</span>
+  <a href="{{ url_for('tool_page', slug=result.tool_slug) }}">{{ result.tool_title_fa }}</a><span>←</span><span>نتیجه</span>
+</nav>
+<section class="result-hero">
+  <span class="success-mark">✓</span>
+  <div>
+    <span class="eyebrow">پردازش پایان یافت</span>
+    <h1>خروجی شما آماده است.</h1>
+    <p>{{ result.input_name }} با {{ result.model_label_fa }} پردازش شد.</p>
+  </div>
+</section>
+{% if result.notice_fa %}<div class="notice">{{ result.notice_fa }}</div>{% endif %}
+<section class="result-list">
+  {% for output in result.outputs %}
+  <article class="result-card">
+    <div class="result-head">
+      <span class="result-index">{{ loop.index }}</span>
+      <div><strong>{{ output.label_fa }}</strong><small>{{ output.filename }}</small></div>
+    </div>
+    {% if output.media_kind == 'video' %}
+    <video controls preload="metadata" src="{{ url_for('download_output', job_id=result.job_id, filename=output.filename, preview=1) }}"></video>
+    {% else %}
+    <audio controls preload="metadata" src="{{ url_for('download_output', job_id=result.job_id, filename=output.filename, preview=1) }}"></audio>
+    {% endif %}
+    <a class="download-button" href="{{ url_for('download_output', job_id=result.job_id, filename=output.filename) }}"><span>دانلود {{ output.label_fa }}</span><b>↓</b></a>
+  </article>
+  {% endfor %}
+</section>
+{% if result.bundle_name %}
+<a class="bundle-button" href="{{ url_for('download_bundle', job_id=result.job_id) }}">
+  <span>ZIP</span><div><strong>دانلود همه خروجی‌ها</strong><small>تمام فایل‌ها در یک بسته</small></div><b>↓</b>
+</a>
+{% endif %}
+<div class="result-actions">
+  <a href="{{ url_for('tool_page', slug=result.tool_slug) }}">پردازش فایل دیگر</a>
+  <a href="{{ url_for('index') }}">بازگشت به همه ابزارها</a>
+</div>
+{% endblock %}

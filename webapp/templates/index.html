@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">چهار ابزار، یک جریان ساده</span>
+    <h1>صدایی که می‌خواهید،<br><em>واضح‌تر از قبل.</em></h1>
+    <p>فایل صوتی یا ویدئویی را انتخاب کنید. مدل مناسب روی همین دستگاه اجرا می‌شود و خروجی آماده دانلود خواهد بود.</p>
+  </div>
+  <div class="hero-wave" aria-hidden="true">
+    {% for height in [18,32,48,76,42,94,64,34,82,54,26,68,38,20,46] %}
+      <span style="--bar: {{ height }}%"></span>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="status-strip" aria-label="وضعیت سیستم">
+  <div><span class="status-icon">◉</span><p><small>پردازنده فعال</small><strong>{{ diagnostics.get('device', 'در حال بررسی') }}</strong></p></div>
+  <div><span class="status-icon">◆</span><p><small>مدل‌های آماده</small><strong>{{ diagnostics.get('models_ready', 0) }} از ۶</strong></p></div>
+  <div><span class="status-icon">↗</span><p><small>اتصال اینترنت</small><strong>نیاز نیست</strong></p></div>
+</section>
+
+<div class="section-heading">
+  <div><span class="eyebrow">ابزار را انتخاب کنید</span><h2>امروز روی کدام صدا کار می‌کنیم؟</h2></div>
+  <p>هر ابزار ورودی، مدل و خروجی مناسب خودش را دارد.</p>
+</div>
+
+<section class="tool-grid">
+  <a class="tool-card blue" href="{{ url_for('tool_page', slug='enhancement') }}">
+    <span class="tool-number">۱</span><span class="tool-icon">✦</span>
+    <h3>بهبود کیفیت صدا</h3><p>نویز پس‌زمینه را کم کنید و گفتار را واضح‌تر بشنوید.</p>
+    <span class="tool-link">شروع پردازش <b>←</b></span>
+  </a>
+  <a class="tool-card violet" href="{{ url_for('tool_page', slug='separation') }}">
+    <span class="tool-number">۲</span><span class="tool-icon">⑂</span>
+    <h3>جداسازی دو گوینده</h3><p>یک مکالمه ترکیبی را به دو فایل صوتی مستقل تبدیل کنید.</p>
+    <span class="tool-link">شروع پردازش <b>←</b></span>
+  </a>
+  <a class="tool-card teal" href="{{ url_for('tool_page', slug='super-resolution') }}">
+    <span class="tool-number">۳</span><span class="tool-icon">≋</span>
+    <h3>افزایش وضوح صدا</h3><p>جزئیات فرکانسی ازدست‌رفته را برای صدایی کامل‌تر بازسازی کنید.</p>
+    <span class="tool-link">شروع پردازش <b>←</b></span>
+  </a>
+  <a class="tool-card coral" href="{{ url_for('tool_page', slug='target-speaker') }}">
+    <span class="tool-number">۴</span><span class="tool-icon">◎</span>
+    <h3>استخراج گوینده هدف</h3><p>با کمک تصویر لب‌ها، صدای فرد موردنظر را از ویدئو جدا کنید.</p>
+    <span class="tool-link">شروع پردازش <b>←</b></span>
+  </a>
+</section>
+{% endblock %}
+

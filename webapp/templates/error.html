@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="error-panel">
+  <span class="error-mark">!</span>
+  <span class="eyebrow">راهنمای رفع مشکل</span>
+  <h1>{{ title }}</h1>
+  <p>{{ message }}</p>
+  {% if detail %}
+  <details><summary>نمایش جزئیات فنی</summary><pre>{{ detail }}</pre></details>
+  {% endif %}
+  <div class="result-actions"><a href="{{ url_for('index') }}">بازگشت به صفحه اصلی</a></div>
+</section>
+{% endblock %}
